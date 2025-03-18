@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Grade Calculator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+
+        .calculator-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            max-width: 90%;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        input[type="text"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e9f5ff;
+            border: 1px solid #b3d7ff;
+            border-radius: 4px;
+            color: #333;
+            text-align: center;
+        }
+
+        #result p {
+            margin: 5px 0;
+        }
+
+        @media (max-width: 480px) {
+            .calculator-container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator-container">
+        <h2>Grade Calculator</h2>
+
+        <label for="gradesInput">Enter grades (comma-separated):</label>
+        <input type="text" id="gradesInput" name="gradesInput" placeholder="e.g., 85, 92, 78">
+
+        <button onclick="calculateAndDisplay()">Calculate</button>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        function calculateAndDisplay() {
+            let gradesInput = document.getElementById("gradesInput").value;
+            let grades = gradesInput.split(',').map(Number);
+
+            let resultDiv = document.getElementById("result");
+            let calculation = calculateGrade(grades);
+
+            if (typeof calculation === "string") {
+                resultDiv.textContent = calculation;
+            } else {
+                resultDiv.innerHTML = `
+                    <p>Sum: ${calculation.sum}</p>
+                    <p>Average: ${calculation.average.toFixed(2)}</p>
+                    <p>Grade: ${calculation.grade}</p>
+                `;
+            }
+        }
+
+        function calculateGrade(grades) {
+            if (!Array.isArray(grades) || grades.length === 0) {
+                return "Invalid input";
+            }
+
+            let sum = grades.reduce((acc, val) => acc + val, 0);
+            let average = sum / grades.length;
+
+            let grade;
+            if (average >= 91 && average <= 100) {
+                grade = "A";
+            } else if (average >= 81 && average <= 90) {
+                grade = "B";
+            } else if (average >= 71 && average <= 80) {
+                grade = "C";
+            } else if (average >= 0 && average <= 70) {
+                grade = "D";
+            } else {
+                grade = "Invalid average";
+            }
+
+            return {
+                sum: sum,
+                average: average,
+                grade: grade
+            };
+        }
+    </script>
+</body>
+</html>
